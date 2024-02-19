@@ -1,20 +1,24 @@
 import { useEmpsContext } from "../../lib/context/EmployeeContext/EmpContext";
-import  { useState } from "react";
+import { useState } from "react";
 import ReactImageFallback from "react-image-fallback";
 import { useNavigate } from "react-router-dom";
 import { EmpResponseType } from "../../api/Employees/employee.types";
+import { deleteEmpApi } from "../../api/Employees/employee.client";
+
 
 interface Props {
   emp: EmpResponseType,
 }
 
 const EmployeesTable = ({ emp }: Props) => {
-  const { deleteEmp } = useEmpsContext();
+  const { selectEmp,deleteEmp } = useEmpsContext();
   const navigate = useNavigate();
   const [zoomed, setZoomed] = useState(false);
 
   const deleteEmpHandler = () => {
-    deleteEmp(emp._id);
+    deleteEmpApi(emp._id).then(() => {
+      deleteEmp(emp._id)
+    }).catch(err => { console.log(err) })
   };
 
   const toggleZoom = () => {
